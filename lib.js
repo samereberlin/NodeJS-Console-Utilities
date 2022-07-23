@@ -11,6 +11,23 @@ module.exports = {
 		YELLOWB: '\x1b[1;33m',
 	},
 
+	execCommand: function (command) {
+		return new Promise((resolve) => {
+			require('child_process').exec(command, function (error, stdout, stderr) {
+				resolve({error, stdout, stderr});
+			});
+		});
+	},
+
+	execCommandAvailableCheck: function (command) {
+		try {
+			require('child_process').execSync(`which ${command}`, {encoding: 'utf8'});
+		} catch (error) {
+			this.printError(`Command not found: ${command}`);
+			process.exit(1);
+		}
+	},
+
 	getFilesDirsFromArgv: function () {
 		if (process.argv.length < 3) {
 			console.log(`Usage: ${this.getAppName()} [.] [file list] [directory list]`);
