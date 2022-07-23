@@ -5,10 +5,10 @@ const rl = require('readline').createInterface({input: process.stdin, output: pr
 const COLORS = {
 	RESET: '\x1b[0m',
 	BRIGHT: '\x1b[1m',
-	GREENB: '\x1b[1,32m',
-	REDB: '\x1b[1,31m',
-	YELLOWB: '\x1b[1,33m',
-}
+	GREENB: '\x1b[1;32m',
+	REDB: '\x1b[1;31m',
+	YELLOWB: '\x1b[1;33m',
+};
 
 module.exports = {
 	COLORS,
