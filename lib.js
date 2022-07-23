@@ -2,16 +2,48 @@ const fs = require('fs');
 const path = require('path');
 const rl = require('readline').createInterface({input: process.stdin, output: process.stdout});
 
-const COLORS = {
-	RESET: '\x1b[0m',
-	BRIGHT: '\x1b[1m',
-	GREENB: '\x1b[1;32m',
-	REDB: '\x1b[1;31m',
-	YELLOWB: '\x1b[1;33m',
-};
-
 module.exports = {
-	COLORS,
+	COLORS: {
+		RESET: '\x1b[0m',
+		BRIGHT: '\x1b[1m',
+		GREENB: '\x1b[1;32m',
+		REDB: '\x1b[1;31m',
+		YELLOWB: '\x1b[1;33m',
+	},
+
+	getFilesDirsFromArgv: function () {
+		if (process.argv.length < 3) {
+			console.log(`Usage: ${this.getAppName()} [.] [file list] [directory list]`);
+			process.exit(1);
+		}
+		const dirs = [],
+			files = [],
+			unknown = [],
+			unsupported = [];
+		for (let index = 2; index < process.argv.length; index++) {
+			if (fs.existsSync(process.argv[index])) {
+				if (fs.lstatSync(process.argv[index]).isFile()) {
+					files.push(process.argv[index]);
+				} else if (fs.lstatSync(process.argv[index]).isDirectory()) {
+					dirs.push(process.argv[index]);
+				} else {
+					unsupported.push(process.argv[index]);
+				}
+			} else {
+				unknown.push(process.argv[index]);
+			}
+		}
+		if (unknown.length) {
+			this.printError(`Unknown files/directories: ${unknown.join(', ')}`);
+		}
+		if (unsupported.length) {
+			this.printError(`Unsupported files/directories: ${unknown.join(', ')}`);
+		}
+		if (unknown.length || unsupported.length) {
+			process.exit(1);
+		}
+		return {files, dirs};
+	},
 
 	findFiles: function (findPath, regexpFilter) {
 		const findRecursively = function (currentPath, arrayOfFiles = []) {
@@ -33,17 +65,25 @@ module.exports = {
 		return path.basename(process.argv[1]);
 	},
 
-	printText: function (text, color) {
-		console.log(`${color || COLORS.GREENB}${text}${COLORS.RESET}`);
+	printError: function (text, title = 'ERROR =>') {
+		console.log(`${this.printSetTextColor(title, this.COLORS.REDB)} ${text}`);
 	},
 
-	printTextInline: function (text, color) {
-		process.stdout.write(`${color || COLORS.GREENB}${text}${COLORS.RESET}`);
+	printMessage: function (text, title = `${this.getAppName()} =>`) {
+		console.log(`${this.printSetTextColor(title, this.COLORS.GREENB)} ${text}`);
+	},
+
+	printSetTextColor: function (text, color = this.COLORS.GREENB) {
+		return `${color}${text}${this.COLORS.RESET}`;
+	},
+
+	printTextColor: function (text, color = '') {
+		console.log(this.printSetTextColor(text, color));
 	},
 
 	prompt: function (text) {
 		return new Promise((resolve) => {
-			rl.question(`${COLORS.YELLOWB}${text}${COLORS.RESET}`, resolve);
+			rl.question(`${this.printSetTextColor(text, this.COLORS.YELLOWB)}`, resolve);
 		});
 	},
 };
