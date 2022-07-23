@@ -13,10 +13,6 @@ const COLORS = {
 module.exports = {
 	COLORS,
 
-	colorText: function (color, text) {
-		return `${color}${text}${COLORS.RESET}`;
-	},
-
 	findFiles: function (findPath, regexpFilter) {
 		const findRecursively = function (currentPath, arrayOfFiles = []) {
 			const files = fs.readdirSync(currentPath);
@@ -35,6 +31,14 @@ module.exports = {
 
 	getAppName: function () {
 		return path.basename(process.argv[1]);
+	},
+
+	printText: function (text, color) {
+		console.log(`${color || COLORS.GREENB}${text}${COLORS.RESET}`);
+	},
+
+	printTextInline: function (text, color) {
+		process.stdout.write(`${color || COLORS.GREENB}${text}${COLORS.RESET}`);
 	},
 
 	prompt: function (text) {
