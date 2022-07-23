@@ -2,10 +2,10 @@
 
 const lib = require('./lib.js');
 
-console.log(lib.COLORS.YELLOWB + '====> Testing colors...' + lib.COLORS.RESET);
-console.log(lib.COLORS.REDB + '====> Testing colors...' + lib.COLORS.RESET);
-console.log(lib.COLORS.GREENB + '====> Testing colors...' + lib.COLORS.RESET);
-console.log(lib.COLORS.BRIGHT + '====> Testing colors...' + lib.COLORS.RESET);
+console.log(lib.colorText(lib.COLORS.YELLOWB, '====> Testing colors...'));
+console.log(lib.colorText(lib.COLORS.REDB, '====> Testing colors...'));
+console.log(lib.colorText(lib.COLORS.GREENB, '====> Testing colors...'));
+console.log(lib.colorText(lib.COLORS.BRIGHT, '====> Testing colors...'));
 console.log('====> Testing colors...');
 
 async function main() {

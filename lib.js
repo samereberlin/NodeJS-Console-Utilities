@@ -13,6 +13,10 @@ const COLORS = {
 module.exports = {
 	COLORS,
 
+	colorText: function (color, text) {
+		return `${color}${text}${COLORS.RESET}`;
+	},
+
 	findFiles: function (findPath, regexpFilter) {
 		const findRecursively = function (currentPath, arrayOfFiles = []) {
 			const files = fs.readdirSync(currentPath);
