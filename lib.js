@@ -12,9 +12,19 @@ module.exports = {
 	},
 
 	execCommand: function (command) {
-		return new Promise((resolve) => {
-			require('child_process').exec(command, function (error, stdout, stderr) {
-				resolve({error, stdout, stderr});
+		return new Promise((resolve, reject) => {
+			const spawn = require('child_process').spawn(command, [], {shell: true});
+			spawn.stdout.on('data', function (data) {
+				console.log(data.toString());
+			});
+			spawn.stderr.on('data', function (data) {
+				console.log(data.toString());
+			});
+			spawn.on('error', function (error) {
+				console.log(error.toString());
+			});
+			spawn.on('close', function (code) {
+				code === 0 ? resolve(code.toString()) : reject(code.toString());
 			});
 		});
 	},
@@ -40,9 +50,9 @@ module.exports = {
 		for (let index = 2; index < process.argv.length; index++) {
 			if (fs.existsSync(process.argv[index])) {
 				if (fs.lstatSync(process.argv[index]).isFile()) {
-					files.push(process.argv[index]);
+					files.push(path.resolve(process.argv[index]));
 				} else if (fs.lstatSync(process.argv[index]).isDirectory()) {
-					dirs.push(process.argv[index]);
+					dirs.push(path.resolve(process.argv[index]));
 				} else {
 					unsupported.push(process.argv[index]);
 				}
@@ -98,9 +108,10 @@ module.exports = {
 		console.log(this.printSetTextColor(text, color));
 	},
 
-	prompt: function (text) {
+	prompt: function (text, suggestion) {
 		return new Promise((resolve) => {
-			rl.question(`${this.printSetTextColor(text, this.COLORS.YELLOWB)}`, resolve);
+			rl.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, resolve);
+			rl.write(suggestion);
 		});
 	},
 };
