@@ -15,14 +15,16 @@ async function main() {
 
 	const errorList = [];
 	const options = await lib.prompt('Convert options?', '-resize 3840x> -quality 85');
-	const suffix = await lib.prompt('Output suffix? (use an empty suffix to overwrite the input file)', '.out.jpg');
+	const overwrite = /^[^n]*$/i.test(await lib.prompt('Overwrite input files? [Y/n]:'));
 
 	for (const [index, file] of files.entries()) {
 		lib.printMessage(`converting ${index + 1} of ${files.length} files: ${file}`);
 		try {
-			// TODO: implement convert command here, and delete PNG files in case of suffix.length == 0.
-			/**/ const resp = await lib.execCommand(`basename ${file}`);
-			/**/ console.log('====> resp:', resp);
+			// TODO: implement output filename engine.
+			const output = '???'; // Check NodeJS file name extension API.
+			// TODO: implement convert command here.
+			await lib.execCommand(`basename ${file}`);
+			// RODO: and delete PNG files in case of overwrite === true.
 		} catch (error) {
 			errorList.push(file);
 		}
