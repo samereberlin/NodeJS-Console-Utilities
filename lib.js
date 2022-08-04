@@ -50,9 +50,9 @@ module.exports = {
 		for (let index = 2; index < process.argv.length; index++) {
 			if (fs.existsSync(process.argv[index])) {
 				if (fs.lstatSync(process.argv[index]).isFile()) {
-					files.push(path.resolve(process.argv[index]));
+					files.push(path.join(process.cwd(), process.argv[index]));
 				} else if (fs.lstatSync(process.argv[index]).isDirectory()) {
-					dirs.push(path.resolve(process.argv[index]));
+					dirs.push(path.join(process.cwd(), process.argv[index]));
 				} else {
 					unsupported.push(process.argv[index]);
 				}
