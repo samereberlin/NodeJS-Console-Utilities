@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const lib = require('./lib.js');
+const path = require('path');
 
 async function main() {
 	lib.execCommandAvailableCheck('convert');
@@ -15,16 +16,17 @@ async function main() {
 
 	const errorList = [];
 	const options = await lib.prompt('Convert options?', '-resize 3840x> -quality 85');
-	const overwrite = /^[^n]*$/i.test(await lib.prompt('Overwrite input files? [Y/n]:'));
+	const suffix = await lib.prompt('Output file suffix?', '_out');
+	const discard = /^[^n]*$/i.test(await lib.prompt('Discard input files? [Y/n]:', 'Y'));
 
 	for (const [index, file] of files.entries()) {
 		lib.printMessage(`converting ${index + 1} of ${files.length} files: ${file}`);
+		const output = file.substring(0, file.length - path.extname(file).length) + suffix + '.jpg';
+
 		try {
-			// TODO: implement output filename engine.
-			const output = '???'; // Check NodeJS file name extension API.
 			// TODO: implement convert command here.
 			await lib.execCommand(`basename ${file}`);
-			// RODO: and delete PNG files in case of overwrite === true.
+			// TODO: and delete input files in case of discard === true.
 		} catch (error) {
 			errorList.push(file);
 		}
