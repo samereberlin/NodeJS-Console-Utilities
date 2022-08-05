@@ -15,7 +15,7 @@ async function main() {
 	}
 
 	const errorList = [];
-	const options = await lib.prompt('Convert options?', '-resize 3840x> -quality 85');
+	const options = await lib.prompt('Convert options?', '-resize 3840x\\> -quality 85');
 	const suffix = await lib.prompt('Output file suffix?', '_out');
 	const discard = /^[^n]*$/i.test(await lib.prompt('Discard input files? [Y/n]:', 'Y'));
 
@@ -24,15 +24,17 @@ async function main() {
 		const output = file.substring(0, file.length - path.extname(file).length) + suffix + '.jpg';
 
 		try {
-			// TODO: implement convert command here.
-			await lib.execCommand(`basename ${file}`);
+			await lib.execCommand(`convert ${file} ${options} ${output}`);
 			// TODO: and delete input files in case of discard === true.
 		} catch (error) {
 			errorList.push(file);
 		}
 	}
 
-	// console.log('====> ', lib.findFiles(process.cwd(), /.*js$/i));
+	if (errorList.length) {
+		lib.printError('While converting files:');
+		errorList.forEach((errorFile) => lib.printError('', `\t${errorFile}`));
+	}
 	process.exit(0);
 }
 
