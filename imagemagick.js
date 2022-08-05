@@ -25,7 +25,9 @@ async function main() {
 
 		try {
 			await lib.execCommand(`convert ${file} ${options} ${output}`);
-			// TODO: and delete input files in case of discard === true.
+			if (discard) {
+				await lib.execCommand(`rm -f ${file}`);
+			}
 		} catch (error) {
 			errorList.push(file);
 		}
