@@ -21,7 +21,7 @@ async function main() {
 
 	let discard = '';
 	do {
-		discard = await lib.prompt('Discard input files? [Y/n]:', 'Y');
+		discard = await lib.prompt('Discard input files? [y/N]:', 'N');
 	} while (!/^[ny]$/i.test(discard));
 	discard = discard.toLowerCase() === 'y';
 
@@ -36,7 +36,7 @@ async function main() {
 			continue;
 		}
 
-		const output = `${file.substring(0, file.length - extNameLength)}${suffix}.mp4`;
+		const output = `${file.substring(0, file.length - extNameLength)}${suffix}.jpg`;
 		if (fs.existsSync(output)) {
 			lib.printError(`${file} (output file already exists)`);
 			errorList.push(`${file} (output file already exists)`);
@@ -44,9 +44,9 @@ async function main() {
 		}
 
 		try {
-			await lib.execCommand(`convert ${file} ${options} ${output}`);
+			lib.execCommand(`convert ${file} ${options} ${output}`);
 			if (discard) {
-				await lib.execCommand(`rm -f ${file}`);
+				lib.execCommand(`rm -f ${file}`);
 			}
 		} catch (error) {
 			lib.printError(`While converting file: ${file}`);

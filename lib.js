@@ -12,21 +12,9 @@ module.exports = {
 	},
 
 	execCommand: function (command) {
-		return new Promise((resolve, reject) => {
-			const spawn = require('child_process').spawn(command, [], {shell: true});
-			spawn.stdout.on('data', function (data) {
-				console.log(data.toString());
-			});
-			spawn.stderr.on('data', function (data) {
-				console.log(data.toString());
-			});
-			spawn.on('error', function (error) {
-				console.log(error.toString());
-			});
-			spawn.on('close', function (code) {
-				code === 0 ? resolve(code.toString()) : reject(code.toString());
-			});
-		});
+		process.stdin.setRawMode(false);
+		require('child_process').spawnSync(command, [], {shell: true, stdio: 'inherit'});
+		process.stdin.setRawMode(true);
 	},
 
 	execCommandAvailableCheck: function (command) {

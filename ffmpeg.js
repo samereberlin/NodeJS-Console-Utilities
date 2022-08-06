@@ -24,7 +24,7 @@ async function main() {
 
 	let discard = '';
 	do {
-		discard = await lib.prompt('Discard input files? [Y/n]:', 'Y');
+		discard = await lib.prompt('Discard input files? [y/N]:', 'N');
 	} while (!/^[ny]$/i.test(discard));
 	discard = discard.toLowerCase() === 'y';
 
@@ -47,9 +47,9 @@ async function main() {
 		}
 
 		try {
-			await lib.execCommand(`ffmpeg -y -i ${file} ${options} ${output}`);
+			lib.execCommand(`ffmpeg -y -i ${file} ${options} ${output}`);
 			if (discard) {
-				await lib.execCommand(`rm -f ${file}`);
+				lib.execCommand(`rm -f ${file}`);
 			}
 		} catch (error) {
 			lib.printError(`While encoding file: ${file}`);
