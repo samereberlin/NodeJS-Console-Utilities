@@ -14,18 +14,33 @@ async function main() {
 	dryRunFirst = dryRunFirst.toLowerCase() === 'y';
 
 	if (dryRunFirst) {
+		lib.printTextColor('--------------------------------------------------------------------------------');
+		lib.printMessage(`rsync --dry-run ${args}`);
 		try {
-			lib.execCommand('cp -i 01.txt 02.txt ');
+			lib.execCommand(`rsync --dry-run ${args}`);
 		} catch (error) {
-			lib.printError(`While during execution: ${error}`);
+			lib.printError(`While executing command: rsync --dry-run ${args}`);
+			process.exit(0);
 		}
-		// lib.execCommand(
-		// 	'rsync --dry-run -rcv --delete-after --exclude ".DS_Store" --exclude "ios/Pods" --exclude "android/app/build" --exclude "android/.gradle" --exclude "node_modules" -e "ssh -p 2222" /Users/samereberlin/hd/user/1_Meus/ 192.168.8.113:/sdcard/1_Meus/',
-		// );
+
+		let proceed = '';
+		do {
+			proceed = await lib.prompt('Are you sure you want to proceed? [Y/n]:', 'Y');
+		} while (!/^[ny]$/i.test(proceed));
+		proceed = proceed.toLowerCase() === 'y';
+
+		if (!proceed) {
+			process.exit(0);
+		}
 	}
 
-	// TODO: ???
-
+	lib.printTextColor('--------------------------------------------------------------------------------');
+	lib.printMessage(`rsync ${args}`);
+	try {
+		lib.execCommand(`rsync ${args}`);
+	} catch (error) {
+		lib.printError(`While executing command: rsync ${args}`);
+	}
 	process.exit(0);
 }
 

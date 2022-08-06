@@ -13,8 +13,11 @@ module.exports = {
 
 	execCommand: function (command) {
 		process.stdin.setRawMode(false);
-		require('child_process').spawnSync(command, [], {shell: true, stdio: 'inherit'});
+		const result = require('child_process').spawnSync(command, [], {shell: true, stdio: 'inherit'});
 		process.stdin.setRawMode(true);
+		if (result.status !== 0) {
+			throw result.status;
+		}
 	},
 
 	execCommandAvailableCheck: function (command) {
