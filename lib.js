@@ -26,6 +26,14 @@ module.exports = {
 		}
 	},
 
+	getArgsFromArgv: function (minLength, maxLength, errorMessage) {
+		if ((minLength && process.argv.length < minLength + 2) || (maxLength && process.argv.length > maxLength + 2)) {
+			console.log(errorMessage);
+			process.exit(1);
+		}
+		return process.argv.slice(2).join(' ');
+	},
+
 	getFilesDirsFromArgv: function () {
 		if (process.argv.length < 3) {
 			console.log(`Usage: ${this.getAppName()} [.] [file list] [directory list]`);

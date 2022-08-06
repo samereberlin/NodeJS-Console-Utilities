@@ -5,7 +5,7 @@ const lib = require('./lib.js');
 async function main() {
 	lib.execCommandAvailableCheck('rsync');
 
-	// TODO: const args = lib.getArgsFromArgv(minLength, maxLength, errorMessage);
+	const args = lib.getArgsFromArgv(2, null, `Usage: ${lib.getAppName()} [rsync_options...] src dest`);
 
 	let dryRunFirst = '';
 	do {
