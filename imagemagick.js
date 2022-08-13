@@ -18,12 +18,7 @@ async function main() {
 	const errorList = [];
 	const options = await lib.prompt('Convert options?', '-resize 3840x\\> -quality 85');
 	const suffix = await lib.prompt('Output file suffix?', '_out');
-
-	let discard = '';
-	do {
-		discard = await lib.prompt('Discard input files? [y/N]:', 'N');
-	} while (!/^[ny]$/i.test(discard));
-	discard = discard.toLowerCase() === 'y';
+	const discard = await lib.confirm('Discard input files? [y/N]:', 'N');
 
 	for (const [index, file] of files.entries()) {
 		lib.printTextColor('--------------------------------------------------------------------------------');

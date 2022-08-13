@@ -21,12 +21,7 @@ async function main() {
 		'-vcodec libx265 -crf 28 -map_metadata 0 -movflags use_metadata_tags',
 	);
 	const suffix = await lib.prompt('Output file suffix?', '_out');
-
-	let discard = '';
-	do {
-		discard = await lib.prompt('Discard input files? [y/N]:', 'N');
-	} while (!/^[ny]$/i.test(discard));
-	discard = discard.toLowerCase() === 'y';
+	const discard = await lib.confirm('Discard input files? [y/N]:', 'N');
 
 	for (const [index, file] of files.entries()) {
 		lib.printTextColor('--------------------------------------------------------------------------------');

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const rl = require('readline').createInterface({input: process.stdin, output: process.stdout});
+const readline = require('readline');
 
 module.exports = {
 	COLORS: {
@@ -9,6 +9,33 @@ module.exports = {
 		GREENB: '\x1b[1;32m',
 		REDB: '\x1b[1;31m',
 		YELLOWB: '\x1b[1;33m',
+	},
+
+	confirm: function (text, suggestion) {
+		const interface = readline.createInterface({input: process.stdin, output: process.stdout});
+		let currentResponse = suggestion;
+		const onKeyPress = (c, k) => {
+			if (c !== '\r') {
+				if (/y/i.test(c) || /n/i.test(c)) {
+					currentResponse = c;
+				}
+				interface.output.write('\x1B[2K'); // Esc [2K: clear entire line.
+				interface.output.cursorTo(0);
+				interface.clearLine();
+				interface.output.moveCursor(0, -1);
+				interface.prompt();
+				interface.write(currentResponse);
+			}
+		};
+		return new Promise((resolve) => {
+			interface.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, (response) => {
+				interface.input.removeListener('keypress', onKeyPress);
+				interface.close();
+				resolve(/y/i.test(response));
+			});
+			interface.write(suggestion);
+			interface.input.on('keypress', onKeyPress);
+		});
 	},
 
 	execCommand: function (command) {
@@ -108,9 +135,13 @@ module.exports = {
 	},
 
 	prompt: function (text, suggestion) {
+		const interface = readline.createInterface({input: process.stdin, output: process.stdout});
 		return new Promise((resolve) => {
-			rl.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, resolve);
-			rl.write(suggestion);
+			interface.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, (response) => {
+				interface.close();
+				resolve(response);
+			});
+			interface.write(suggestion);
 		});
 	},
 };
