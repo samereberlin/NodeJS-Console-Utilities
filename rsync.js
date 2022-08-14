@@ -7,7 +7,7 @@ async function main() {
 
 	const args = lib.getArgsFromArgv(2, null, `Usage: ${lib.getAppName()} [rsync_options...] src dest`);
 
-	const dryRunFirst = await lib.confirm('Would you like to execute --dry-run first? [Y/n]:', 'Y');
+	const dryRunFirst = await lib.confirm('Would you like to execute --dry-run first? [Y/n]:', ['y', 'n'], 'Y');
 	if (dryRunFirst) {
 		lib.printTextColor('--------------------------------------------------------------------------------');
 		lib.printMessage(`rsync --dry-run ${args}`);
@@ -18,7 +18,7 @@ async function main() {
 			process.exit(0);
 		}
 
-		const proceed = await lib.confirm('Are you sure you want to proceed? [Y/n]:', 'Y');
+		const proceed = await lib.confirm('Are you sure you want to proceed? [Y/n]:', ['y', 'n'], 'Y');
 		if (!proceed) {
 			process.exit(0);
 		}

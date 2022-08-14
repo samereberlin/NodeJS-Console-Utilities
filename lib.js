@@ -11,20 +11,20 @@ module.exports = {
 		YELLOWB: '\x1b[1;33m',
 	},
 
-	confirm: function (text, suggestion) {
+	confirm: function (text, options, defaultOption) {
 		const rl = readline.createInterface({input: process.stdin, output: process.stdout});
-		let currentResponse = suggestion;
+		let currentOption = defaultOption;
 		const onKeyPress = (c, k) => {
 			if (c !== '\r') {
-				if (/y/i.test(c) || /n/i.test(c)) {
-					currentResponse = c;
+				if (options.includes(c.toLowerCase())) {
+					currentOption = c;
 				}
 				rl.output.write('\x1B[2K'); // Esc [2K: clear entire line.
 				rl.output.cursorTo(0);
 				rl.clearLine();
 				rl.output.moveCursor(0, -1);
 				rl.prompt();
-				rl.write(currentResponse);
+				rl.write(currentOption);
 			}
 		};
 		return new Promise((resolve) => {
@@ -33,7 +33,7 @@ module.exports = {
 				rl.close();
 				resolve(/y/i.test(response));
 			});
-			rl.write(suggestion);
+			rl.write(defaultOption);
 			rl.input.on('keypress', onKeyPress);
 		});
 	},
