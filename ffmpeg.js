@@ -42,9 +42,9 @@ async function main() {
 		}
 
 		try {
-			lib.execCommand(`ffmpeg -y -i ${file} ${options} ${output}`);
+			lib.execCommand(`ffmpeg -y -i "${file}" ${options} "${output}"`);
 			if (discard) {
-				lib.execCommand(`rm -f ${file}`);
+				lib.execCommand(`rm -f "${file}"`);
 			}
 		} catch (error) {
 			lib.printError(`While encoding file: ${file}`);

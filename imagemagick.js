@@ -39,9 +39,9 @@ async function main() {
 		}
 
 		try {
-			lib.execCommand(`convert ${file} ${options} ${output}`);
+			lib.execCommand(`convert "${file}" ${options} "${output}"`);
 			if (discard) {
-				lib.execCommand(`rm -f ${file}`);
+				lib.execCommand(`rm -f "${file}"`);
 			}
 		} catch (error) {
 			lib.printError(`While converting file: ${file}`);
