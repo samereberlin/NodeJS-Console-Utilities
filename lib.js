@@ -12,29 +12,29 @@ module.exports = {
 	},
 
 	confirm: function (text, suggestion) {
-		const interface = readline.createInterface({input: process.stdin, output: process.stdout});
+		const rl = readline.createInterface({input: process.stdin, output: process.stdout});
 		let currentResponse = suggestion;
 		const onKeyPress = (c, k) => {
 			if (c !== '\r') {
 				if (/y/i.test(c) || /n/i.test(c)) {
 					currentResponse = c;
 				}
-				interface.output.write('\x1B[2K'); // Esc [2K: clear entire line.
-				interface.output.cursorTo(0);
-				interface.clearLine();
-				interface.output.moveCursor(0, -1);
-				interface.prompt();
-				interface.write(currentResponse);
+				rl.output.write('\x1B[2K'); // Esc [2K: clear entire line.
+				rl.output.cursorTo(0);
+				rl.clearLine();
+				rl.output.moveCursor(0, -1);
+				rl.prompt();
+				rl.write(currentResponse);
 			}
 		};
 		return new Promise((resolve) => {
-			interface.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, (response) => {
-				interface.input.removeListener('keypress', onKeyPress);
-				interface.close();
+			rl.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, (response) => {
+				rl.input.removeListener('keypress', onKeyPress);
+				rl.close();
 				resolve(/y/i.test(response));
 			});
-			interface.write(suggestion);
-			interface.input.on('keypress', onKeyPress);
+			rl.write(suggestion);
+			rl.input.on('keypress', onKeyPress);
 		});
 	},
 
@@ -135,13 +135,13 @@ module.exports = {
 	},
 
 	prompt: function (text, suggestion) {
-		const interface = readline.createInterface({input: process.stdin, output: process.stdout});
+		const rl = readline.createInterface({input: process.stdin, output: process.stdout});
 		return new Promise((resolve) => {
-			interface.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, (response) => {
-				interface.close();
+			rl.question(`${this.printSetTextColor(`${text} `, this.COLORS.YELLOWB)}`, (response) => {
+				rl.close();
 				resolve(response);
 			});
-			interface.write(suggestion);
+			rl.write(suggestion);
 		});
 	},
 };
