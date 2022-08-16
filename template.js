@@ -3,9 +3,7 @@
 const lib = require('./lib.js');
 
 async function main() {
-	const proceed = await lib.confirm('Would you like to proceed with the beeps? [Y/n]:', ['y', 'n'], 'Y');
-
-	if (proceed) {
+	if (await lib.confirm('Would you like to proceed with the beeps? [Y/n]:', ['y', 'n'], 'Y')) {
 		lib.playBeeps();
 	}
 

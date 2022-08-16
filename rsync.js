@@ -7,30 +7,27 @@ async function main() {
 
 	const args = lib.getArgsFromArgv(2, null, `Usage: ${lib.getAppName()} [rsync_options...] src dest`);
 
-	const dryRunFirst = await lib.confirm('Would you like to execute --dry-run first? [Y/n]:', ['y', 'n'], 'Y');
-	if (dryRunFirst) {
+	const execCommand = (isDryRun) => {
+		const command = `rsync ${isDryRun ? '--dry-run' : ''} ${args}`;
 		lib.printTextColor('--------------------------------------------------------------------------------');
-		lib.printMessage(`rsync --dry-run ${args}`);
+		lib.printMessage(command);
 		try {
-			lib.execCommand(`rsync --dry-run ${args}`);
+			lib.execCommand(command);
 		} catch (error) {
-			lib.printError(`While executing command: rsync --dry-run ${args}`);
-			process.exit(0);
+			lib.printError(`While executing command: ${command}`);
+			process.exit(1);
 		}
+		lib.playBeeps();
+	};
 
-		const proceed = await lib.confirm('Are you sure you want to proceed? [Y/n]:', ['y', 'n'], 'Y');
-		if (!proceed) {
+	if (await lib.confirm('Would you like to execute --dry-run first? [Y/n]:', ['y', 'n'], 'Y')) {
+		execCommand(true);
+		if (!(await lib.confirm('Are you sure you want to proceed? [Y/n]:', ['y', 'n'], 'Y'))) {
 			process.exit(0);
 		}
 	}
 
-	lib.printTextColor('--------------------------------------------------------------------------------');
-	lib.printMessage(`rsync ${args}`);
-	try {
-		lib.execCommand(`rsync ${args}`);
-	} catch (error) {
-		lib.printError(`While executing command: rsync ${args}`);
-	}
+	execCommand(false);
 	process.exit(0);
 }
 
