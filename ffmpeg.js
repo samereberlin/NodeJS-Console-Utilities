@@ -50,7 +50,10 @@ async function main() {
 			lib.printError(`While encoding file: ${file}`);
 			errorList.push(file);
 		}
+		lib.playBeeps();
 	}
+	lib.playBeeps();
+	lib.playBeeps();
 
 	if (errorList.length) {
 		lib.printTextColor('--------------------------------------------------------------------------------');

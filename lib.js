@@ -118,6 +118,25 @@ module.exports = {
 		return path.basename(process.argv[1]);
 	},
 
+	playBeeps: function (
+		beeps = [
+			{diration: 0.2, frequency: 3000, sleep: 0},
+			{diration: 0.2, frequency: 3000, sleep: 0.1},
+		],
+	) {
+		this.execCommandAvailableCheck('ffplay');
+		let prevSleep = 0;
+		const playCommand = beeps.reduce((prevCommand, beep) => {
+			const {diration = 0.2, frequency = 3000, sleep = 0} = beep;
+			const command = `sleep ${
+				sleep + prevSleep
+			} && ffplay -f lavfi -i "sine=duration=${diration}:frequency=${frequency}" -autoexit -nodisp -loglevel quiet`;
+			prevSleep += diration + sleep;
+			return `${prevCommand} & ${command}`;
+		}, 'sleep 0');
+		this.execCommand(playCommand);
+	},
+
 	printError: function (text, title = 'ERROR =>') {
 		console.log(`${this.printSetTextColor(title, this.COLORS.REDB)} ${text}`);
 	},

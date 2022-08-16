@@ -47,7 +47,10 @@ async function main() {
 			lib.printError(`While converting file: ${file}`);
 			errorList.push(file);
 		}
+		lib.playBeeps();
 	}
+	lib.playBeeps();
+	lib.playBeeps();
 
 	if (errorList.length) {
 		lib.printTextColor('--------------------------------------------------------------------------------');
