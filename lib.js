@@ -16,13 +16,13 @@ module.exports = {
 		let currentOption = defaultOption;
 		const onKeyPress = (c, k) => {
 			if (c !== '\r') {
-				if (options.includes(c.toLowerCase())) {
+				if (options.includes(c && c.toLowerCase())) {
 					currentOption = c;
 				}
 				rl.output.write('\x1B[2K'); // Esc [2K: clear entire line.
 				rl.output.cursorTo(0);
-				rl.clearLine();
 				rl.output.moveCursor(0, -1);
+				rl.clearLine();
 				rl.prompt();
 				rl.write(currentOption);
 			}
