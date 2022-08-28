@@ -10,20 +10,21 @@ It was implemented for didactic reasons, therefore it is not yet ready for produ
 
 ```
 git checkout https://github.com/samereberlin/NodeJS-Console-Utilities.git
-chmod +x NodeJS-Console-Utilities/*
+cd NodeJS-Console-Utilities
+chmod +x *
 ```
 
 2. Execute the command line apps/scripts according to your needs, e.g.:
 
-    `ffmpeg.sh video.mp4` # encode the video.mp4 according to the interactively supplied options.
+    `./ffmpeg.js video.mp4` # encode the video.mp4 according to the interactively supplied options.
 
-    `ffmpeg.sh path-to-dir` # same as above, but recursively into path-to-dir directory.
+    `./ffmpeg.js path-to-dir` # same as above, but recursively into path-to-dir directory.
 
-    `imagemagick.sh image.png` # encode the image.png according to the interactively supplied options.
+    `./imagemagick.js image.png` # encode the image.png according to the interactively supplied options.
 
-    `imagemagick.sh path-to-dir` # same as above, but recursively into path-to-dir directory.
+    `./imagemagick.js path-to-dir` # same as above, but recursively into path-to-dir directory.
 
-    `zip.sh path-to-dir` # compress the path-to-dir according to the interactively supplied options.
+    `./zip.js path-to-dir` # compress the path-to-dir according to the interactively supplied options.
 
     `lib.js` is not an app/script itself, but a library instead, widely used by other apps/scripts included in the project.
 
